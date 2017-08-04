@@ -1,0 +1,29 @@
+2017-08-04 13:16:16.487  INFO 7520 --- [restartedMain] com.avp.cdai.web.WebApplication          : Starting WebApplication on pw-PC with PID 7520 (F:\Work\JAVACODE\cdai-web\target\classes started by pw in F:\Work\JAVACODE\cdai-web)
+2017-08-04 13:16:16.488 DEBUG 7520 --- [restartedMain] com.avp.cdai.web.WebApplication          : Running with Spring Boot v1.5.2.RELEASE, Spring v4.3.7.RELEASE
+2017-08-04 13:16:16.489  INFO 7520 --- [restartedMain] com.avp.cdai.web.WebApplication          : No active profile set, falling back to default profiles: default
+2017-08-04 13:16:18.037  INFO 7520 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@12466f5d: startup date [Fri Aug 04 13:16:18 CST 2017]; root of context hierarchy
+2017-08-04 13:16:22.800  INFO 7520 --- [restartedMain] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat initialized with port(s): 4090 (http)
+2017-08-04 13:16:22.834  INFO 7520 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service Tomcat
+2017-08-04 13:16:22.836  INFO 7520 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet Engine: Apache Tomcat/8.5.11
+2017-08-04 13:16:23.108  INFO 7520 --- [localhost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2017-08-04 13:16:23.109  INFO 7520 --- [localhost-startStop-1] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 5076 ms
+2017-08-04 13:16:23.388  INFO 7520 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'dispatcherServlet' to [/]
+2017-08-04 13:16:23.433  INFO 7520 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'characterEncodingFilter' to: [/*]
+2017-08-04 13:16:23.433  INFO 7520 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2017-08-04 13:16:23.433  INFO 7520 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2017-08-04 13:16:23.433  INFO 7520 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'requestContextFilter' to: [/*]
+2017-08-04 13:16:23.978  INFO 7520 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerAdapter : Looking for @ControllerAdvice: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@12466f5d: startup date [Fri Aug 04 13:16:18 CST 2017]; root of context hierarchy
+2017-08-04 13:16:24.119  INFO 7520 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/error]}" onto public org.springframework.http.ResponseEntity<java.util.Map<java.lang.String, java.lang.Object>> org.springframework.boot.autoconfigure.web.BasicErrorController.error(javax.servlet.http.HttpServletRequest)
+2017-08-04 13:16:24.120  INFO 7520 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/error],produces=[text/html]}" onto public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+2017-08-04 13:16:24.143  INFO 7520 --- [restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/index.html] onto handler of type [class org.springframework.web.servlet.mvc.ParameterizableViewController]
+2017-08-04 13:16:24.166  INFO 7520 --- [restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2017-08-04 13:16:24.166  INFO 7520 --- [restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2017-08-04 13:16:24.233  INFO 7520 --- [restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Mapped URL path [/**/favicon.ico] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2017-08-04 13:16:25.296  INFO 7520 --- [restartedMain] oConfiguration$WelcomePageHandlerMapping : Adding welcome page: class path resource [static/index.html]
+2017-08-04 13:16:25.758  INFO 7520 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2017-08-04 13:16:25.853  INFO 7520 --- [restartedMain] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup
+2017-08-04 13:16:25.995  INFO 7520 --- [restartedMain] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat started on port(s): 4090 (http)
+2017-08-04 13:16:26.004  INFO 7520 --- [restartedMain] com.avp.cdai.web.WebApplication          : Started WebApplication in 12.243 seconds (JVM running for 14.83)
+2017-08-04 13:17:16.806  INFO 7520 --- [http-nio-4090-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring FrameworkServlet 'dispatcherServlet'
+2017-08-04 13:17:16.807  INFO 7520 --- [http-nio-4090-exec-1] o.s.web.servlet.DispatcherServlet        : FrameworkServlet 'dispatcherServlet': initialization started
+2017-08-04 13:17:16.836  INFO 7520 --- [http-nio-4090-exec-1] o.s.web.servlet.DispatcherServlet        : FrameworkServlet 'dispatcherServlet': initialization completed in 29 ms

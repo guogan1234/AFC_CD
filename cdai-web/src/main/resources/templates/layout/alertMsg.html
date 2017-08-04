@@ -1,0 +1,20 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div th:fragment="msg">
+		<!-- 警告 -->
+		<!--<div hidden class="alert alert-warning fade in">
+			<button class="close" data-dismiss="alert">	× </button>
+			<i class="fa-fw fa fa-warning"></i><strong>Warning</strong> Your monthly traffic is reaching limit.
+		</div>-->
+		<div hidden="hidden" class="alert alert-success fade in">
+			<button class="close" onclick="$('.alert').hide()">	× </button>
+			<i class="fa-fw fa fa-check"></i><strong>操作成功！</strong> <span id="successMsg">&nbsp;&nbsp;</span>
+		</div>
+		<div hidden="hidden" class="alert alert-danger fade in">
+			<button class="close" onclick="$('.alert').hide()">	× </button>
+			<i class="fa-fw fa fa-times"></i> <strong>操作失败!</strong> <span id="dangerMsg">&nbsp;&nbsp;</span>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+	<div th:fragment="pwd">
+		<div class="modal fade media-preview" id="changePasswordForm"
+			tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog" style="width: 500px">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+						</button>
+						<h4 class="modal-title" id="myModalLabel">修改密码</h4>
+					</div>
+					<div class="modal-body">
+						<form action="javascript:void(0)" method="post">
+							<div id="errorMessage"></div>
+							<div class="form-group">
+								<label for="current_user" class="col-md-3">当前用户:</label>
+								<!--<label-->
+									<!--for="change_pwd_username"-->
+									<!--sec:authentication="principal.userAccount"></label>-->
+								<!-- <label for="change_pwd_username" class="username"></label> -->
+							</div>
+							<div class="form-group">
+								<label for="change_pwd_oldpwd" class="col-md-3">旧密码:</label> <input
+									type="password" name="change_pwd_oldpwd" value=""
+									id="change_pwd_oldpwd" class="form-control line-cols-2"/>
+							</div>
+							<div class="form-group">
+								<label for="change_pwd_newpwd" class="col-md-3">新密码:</label> <input
+									type="password" name="change_pwd_newpwd" value=""
+									id="change_pwd_newpwd" class="form-control line-cols-2"/>
+							</div>
+							<div class="form-group">
+								<label for="change_pwd_newpwdcfrm" class="col-md-3">确认密码:</label>
+								<input type="password" name="change_pwd_newpwdcfrm" value=""
+									id="change_pwd_newpwdcfrm" class="form-control line-cols-2"/>
+							</div>
+							<div id="changePasswordFormDialogBox" class=""></div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+						<button class="btn btn-primary" id="savePwdUpdate"
+							type="submit" name="save">保存</button>
+					</div>
+					<script type="text/javascript">
+						$(document).ready(function() {
+							$('a[id^=linkChangePassword_]').on('click', function(){
+								$('#changePasswordForm').modal('show');
+								$("#change_pwd_oldpwd").val('');
+								$("#change_pwd_newpwd").val('');
+								$("#change_pwd_newpwdcfrm").val('');
+								$('#errorMessage').html('');
+							});
+							
+							$('#savePwdUpdate').on('click', function() {
+								var newPassConfirm = $("#change_pwd_newpwdcfrm" , "#changePasswordForm").val();
+								var data ={};
+							    data["oldPass"] = $("#change_pwd_oldpwd" , "#changePasswordForm").val();
+							    data["newPass"] = $("#change_pwd_newpwd" , "#changePasswordForm").val();
+							    if ($("#change_pwd_newpwd" , "#changePasswordForm").val() != newPassConfirm)
+							    {
+							    	$('#errorMessage').html('<strong><font color="red">新密码两次输入不一致.</font></strong>');
+							    } else {
+							    	console.log(newPassConfirm);
+							    	$.ajax({
+							            type : 'PUT',
+							            url : CONSTANTS.BASE.PATH + '/business-resource/users/editPassword?userPassword='+newPassConfirm,
+							            dataType : 'json',
+							            contentType:"application/json",
+							            success : function(rtnData) {
+							            	console.log(rtnData);
+							            	var resCode = rtnData.resultCode;
+							            	if(resCode == 30000){
+							            		//$('#changePasswordForm').modal('hide');
+							            		$('#errorMessage').html('<strong><font color="#5FF44F">修改密码成功.</font></strong>');
+							            		setTimeout("closeForm()",1000);
+							            		setTimeout("window.location.href = '/pqtm/lout'",1000);
+							            					            		
+							            	}else if(resCode == -1){
+							            		$('#errorMessage').html('<strong><font color="red">旧密码输入不正确.</font></strong>');
+							            	}else{
+							            		$('#errorMessage').html('<strong><font color="red">修改密码失败.</font></strong>');
+							            	}
+//							              $('#searchMaintenance').click();
+							            },
+							            failure : function(e){
+							            	$('#errorMessage').html('<strong><font color="red">修改密码失败.</font></strong>');
+							            }
+							        })
+							    }
+							})
+						})
+						
+						function closeForm()
+						{
+							$("#changePasswordForm").modal('hide');
+						}
+					</script>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

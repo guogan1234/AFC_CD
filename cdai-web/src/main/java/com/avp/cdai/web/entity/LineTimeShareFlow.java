@@ -10,20 +10,48 @@ import java.util.Date;
  * Created by pw on 2017/8/8.
  */
 @Entity
-@Table(name = "line_time_sharing_passenger_flow",schema = "public")
+@Table(name = "line_time_sharing_passenger_flow",schema = "afccd")
 public class LineTimeShareFlow{
     @Id
     private Integer id;
     @Column(name = "line_id")
     private Integer lineId;
-    @Column(name = "station_id")
-    private Integer stationId;
     @Column(name = "direction")
     private Integer direction;
     @Column(name = "passenger_flow")
     private Integer passengerFlow;
     @Column(name = "flow_timestamp")
     private Date timestamp;
+    @Column(name = "insert_time")
+    private Date insertTime;
+    @Column(name = "section")
+    private Integer section;
+    @Column(name = "line_name")
+    private String lineName;
+
+    public Integer getSection() {
+        return section;
+    }
+
+    public void setSection(Integer section) {
+        this.section = section;
+    }
+
+    public Date getInsertTime() {
+        return insertTime;
+    }
+
+    public void setInsertTime(Date insertTime) {
+        this.insertTime = insertTime;
+    }
+
+    public String getLineName() {
+        return lineName;
+    }
+
+    public void setLineName(String lineName) {
+        this.lineName = lineName;
+    }
 
     public Integer getId() {
         return id;
@@ -39,14 +67,6 @@ public class LineTimeShareFlow{
 
     public void setLineId(Integer lineId) {
         this.lineId = lineId;
-    }
-
-    public Integer getStationId() {
-        return stationId;
-    }
-
-    public void setStationId(Integer stationId) {
-        this.stationId = stationId;
     }
 
     public Integer getDirection() {

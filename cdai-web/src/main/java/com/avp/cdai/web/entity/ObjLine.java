@@ -10,7 +10,7 @@ import java.util.Date;
  * Created by pw on 2017/8/4.
  */
 @Entity
-@Table(name = "obj_line",schema = "public")
+@Table(name = "obj_line",schema = "afccd")
 public class ObjLine {
     @Id
     private Integer id;

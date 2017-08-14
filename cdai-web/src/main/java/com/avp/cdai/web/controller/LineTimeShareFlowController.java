@@ -53,10 +53,10 @@ public class LineTimeShareFlowController {
     }
 
     @RequestMapping(value = "findByConditions",method = RequestMethod.GET)
-    ResponseEntity<RestBody<LineTimeShareFlow>> findByConditions(@RequestParam("ids") List<Integer> ids,@RequestParam(value = "direct",required = false) Integer direct, Date time){
+    ResponseEntity<RestBody<LineTimeShareFlow>> findByConditions(@RequestParam("ids") List<Integer> ids,@RequestParam(value = "direct",required = false) Integer direct,Integer section, Date time){
         ResponseBuilder builder = ResponseBuilder.createBuilder();
         try {
-            List<LineTimeShareFlow> list = lineTimeShareFlowRepository.findAll(where(byConditions(ids, direct, time)));
+            List<LineTimeShareFlow> list = lineTimeShareFlowRepository.findAll(where(byConditions(ids, direct,section, time)));
             if (list.size() <= 0) {
                 logger.debug("线路客流分时多条件查询失败，结果为空");
             } else {
@@ -71,24 +71,29 @@ public class LineTimeShareFlowController {
     }
 
     // Dynamic Query Utils
-    public Specification<LineTimeShareFlow> byConditions(List<Integer> ids, Integer direct, Date time) {
+    public Specification<LineTimeShareFlow> byConditions(List<Integer> ids, Integer direct,Integer section, Date time) {
         return new Specification<LineTimeShareFlow>() {
             public Predicate toPredicate(Root<LineTimeShareFlow> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
                 Predicate predicate = builder.conjunction();
 
-                logger.debug("inventories/findByConditions请求的参数ids值为:{}", ids);
+                logger.debug("findByConditions请求的参数ids值为:{}", ids);
                 if (ids != null) {
 //                    predicate.getExpressions().add(builder.equal(root.get(LineTimeShareFlow_.id), ids));
 //                    predicate.getExpressions().add(builder.in(root.get(LineTimeShareFlow_.lineId)).in(ids));
                     predicate.getExpressions().add(root.<Integer>get(LineTimeShareFlow_.lineId).in(ids));
                 }
 //
-//                logger.debug("inventories/findByConditions请求的参数direct值为:{}", direct);
+                logger.debug("findByConditions请求的参数direct值为:{}", direct);
                 if (direct != null) {
                     predicate.getExpressions().add(builder.equal(root.get(LineTimeShareFlow_.direction), direct));
                 }
+
+                logger.debug("findByConditions请求的参数section值为:{}", section);
+                if (section != null) {
+                    predicate.getExpressions().add(builder.equal(root.get(LineTimeShareFlow_.section), section));
+                }
 //
-                logger.debug("inventories/findByConditions请求的参数time值为:{}", time);
+                logger.debug("findByConditions请求的参数time值为:{}", time);
                 if (time != null) {
                     predicate.getExpressions().add(builder.equal(root.get(LineTimeShareFlow_.timestamp), time));
                 }

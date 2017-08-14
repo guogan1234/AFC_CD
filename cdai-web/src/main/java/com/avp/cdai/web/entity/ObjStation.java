@@ -10,7 +10,7 @@ import java.util.Date;
  * Created by pw on 2017/8/7.
  */
 @Entity
-@Table(name = "obj_station",schema = "public")
+@Table(name = "obj_station",schema = "afccd")
 public class ObjStation {
     @Id
     private Integer id;

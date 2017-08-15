@@ -20,6 +20,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class LineTimeShareFlowController {
         return builder.getResponseEntity();
     }
 
-    @RequestMapping(value = "findByConditions",method = RequestMethod.GET)
+    @RequestMapping(value = "lineShareByConditions",method = RequestMethod.GET)
     ResponseEntity<RestBody<LineTimeShareFlow>> findByConditions(@RequestParam("ids") List<Integer> ids,@RequestParam(value = "direct",required = false) Integer direct,Integer section, Date time){
         ResponseBuilder builder = ResponseBuilder.createBuilder();
         try {
@@ -76,26 +77,49 @@ public class LineTimeShareFlowController {
             public Predicate toPredicate(Root<LineTimeShareFlow> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
                 Predicate predicate = builder.conjunction();
 
-                logger.debug("findByConditions请求的参数ids值为:{}", ids);
+                logger.debug("lineShareByConditions请求的参数ids值为:{}", ids);
                 if (ids != null) {
 //                    predicate.getExpressions().add(builder.equal(root.get(LineTimeShareFlow_.id), ids));
 //                    predicate.getExpressions().add(builder.in(root.get(LineTimeShareFlow_.lineId)).in(ids));
                     predicate.getExpressions().add(root.<Integer>get(LineTimeShareFlow_.lineId).in(ids));
                 }
 //
-                logger.debug("findByConditions请求的参数direct值为:{}", direct);
+                logger.debug("lineShareByConditions请求的参数direct值为:{}", direct);
                 if (direct != null) {
                     predicate.getExpressions().add(builder.equal(root.get(LineTimeShareFlow_.direction), direct));
                 }
 
-                logger.debug("findByConditions请求的参数section值为:{}", section);
+                logger.debug("lineShareByConditions请求的参数section值为:{}", section);
                 if (section != null) {
                     predicate.getExpressions().add(builder.equal(root.get(LineTimeShareFlow_.section), section));
                 }
 //
-                logger.debug("findByConditions请求的参数time值为:{}", time);
+                logger.debug("lineShareByConditions请求的参数time值为:{}", time);
                 if (time != null) {
-                    predicate.getExpressions().add(builder.equal(root.get(LineTimeShareFlow_.timestamp), time));
+                    /*
+                    //测试改变传入参数的值 - (调试中)
+                    Date start = new Date();
+                    Date end = new Date();
+                    logger.debug("转换前：{},{}",start,end);
+                    GetDayStartEndDate.CreateStartEndDate(start,end,time);
+                    logger.debug("转换后：{},{}",start,end);
+                    */
+                    SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+                    String strStart = format1.format(time);
+                    SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd 23:59:59");
+                    String strEnd = format2.format(time);
+                    logger.debug("起始时间为：{}，结束时间为：{}",strStart,strEnd);
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date startTime = null;
+                    Date endTime = null;
+                    try {
+                        startTime = format.parse(strStart);
+                        endTime = format.parse(strEnd);
+                    }catch (Exception e){
+                        logger.error(e.getMessage());
+                    }
+//                    predicate.getExpressions().add(builder.equal(root.get(LineTimeShareFlow_.timestamp), time));
+                    predicate.getExpressions().add(builder.between(root.get(LineTimeShareFlow_.timestamp),startTime,endTime));
                 }
 
                 return predicate;

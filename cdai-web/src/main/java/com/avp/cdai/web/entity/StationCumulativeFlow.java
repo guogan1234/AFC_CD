@@ -3,12 +3,14 @@ package com.avp.cdai.web.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 /**
  * Created by pw on 2017/8/11.
  */
 @Entity
+@Table(name = "station_cumulative_passenger_flow",schema = "afccd")
 public class StationCumulativeFlow {
     @Id
     private Integer id;

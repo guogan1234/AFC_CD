@@ -20,6 +20,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -92,7 +93,22 @@ public class LineCumulativeFlowController {
 //
                 logger.debug("lineSumByConditions请求的参数time值为:{}", time);
                 if (time != null) {
-                    predicate.getExpressions().add(builder.equal(root.get(LineCumulativeFlow_.flowTime), time));
+                    SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+                    String strStart = format1.format(time);
+                    SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd 23:59:59");
+                    String strEnd = format2.format(time);
+                    logger.debug("起始时间为：{}，结束时间为：{}",strStart,strEnd);
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date startTime = null;
+                    Date endTime = null;
+                    try {
+                        startTime = format.parse(strStart);
+                        endTime = format.parse(strEnd);
+                    }catch (Exception e){
+                        logger.error(e.getMessage());
+                    }
+//                    predicate.getExpressions().add(builder.equal(root.get(LineCumulativeFlow_.flowTime), time));
+                    predicate.getExpressions().add(builder.between(root.get(LineCumulativeFlow_.flowTime),startTime,endTime));
                 }
 
                 return predicate;

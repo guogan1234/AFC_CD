@@ -1,8 +1,8 @@
 package com.avp.cdai.web.controller;
 
-import com.avp.cdai.web.entity.LineCumulativeFlow;
-import com.avp.cdai.web.entity.LineCumulativeFlow_;
+import com.avp.cdai.web.entity.*;
 import com.avp.cdai.web.repository.LineCumulativeFlowRepository;
+import com.avp.cdai.web.repository.ObjLineRepository;
 import com.avp.cdai.web.rest.ResponseBuilder;
 import com.avp.cdai.web.rest.ResponseCode;
 import com.avp.cdai.web.rest.RestBody;
@@ -21,18 +21,19 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 /**
- * Created by pw on 2017/8/11.
+ * Created by guo on 2017/8/11.
  */
 @RestController
 public class LineCumulativeFlowController {
     @Autowired
     LineCumulativeFlowRepository lineCumulativeFlowRepository;
+    @Autowired
+    ObjLineRepository objLineRepository;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -49,6 +50,74 @@ public class LineCumulativeFlowController {
         }
         return builder.getResponseEntity();
     }
+
+    @RequestMapping(value = "viewDataLineSumByConditions",method = RequestMethod.GET)
+    ResponseEntity<RestBody<ViewData<ObjLine>>> viewDataFindByConditions(@RequestParam("ids") List<Integer> ids, @RequestParam(value = "direct",required = false) Integer direct, Integer section, Date time){
+        ResponseBuilder builder = ResponseBuilder.createBuilder();
+        try {
+            Date startTime = null;
+            Date endTime = null;
+            if (time != null) {
+                SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+                String strStart = format1.format(time);
+                SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd 23:59:59");
+                String strEnd = format2.format(time);
+                logger.debug("viewDataLineSumByConditions--起始时间为：{}，结束时间为：{}", strStart, strEnd);
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                try {
+                    startTime = format.parse(strStart);
+                    endTime = format.parse(strEnd);
+                } catch (Exception e) {
+                    logger.error(e.getMessage());
+                }
+            }
+            logger.debug("ids数据量为:({})", ids.size());
+            ViewData<ObjLine> viewData = new ViewData<ObjLine>();
+            Map<Integer,List<Integer>> flowMap = new HashMap<Integer,List<Integer>>();
+            Map<Integer,ObjLine> objMap = new HashMap<Integer,ObjLine>();
+            List<Date> dateList = null;
+            //取范围较大的时间轴列表
+            Integer tempCount = 0;
+            for(int i = 0;i<ids.size();i++) {
+                List<Integer> temp = new ArrayList<Integer>();
+                List<LineCumulativeFlow> list = lineCumulativeFlowRepository.getData(ids.get(i), section,startTime,endTime);
+                logger.debug("数据量为:({},{})", list.size(),ids.get(i));
+                Integer key = null;
+                List<Date> tempDateList = new ArrayList<Date>();
+                for (LineCumulativeFlow s:list){
+                    temp.add(s.getPassengerFlow());
+                    tempDateList.add(s.getFlowTime());
+                }
+                if(list.size() > tempCount) {
+                    tempCount = list.size();
+                    dateList = tempDateList;
+                }
+                flowMap.put(ids.get(i),temp);
+            }
+            logger.debug("flowMap数据量为:({})", flowMap.size());
+//            List<ObjStation> objList = stationShareFlowRepository.getObjData();
+            List<ObjLine> objList = objLineRepository.findBylineIdIn(ids);
+            logger.debug("ObjStation数据量为:({})", objList.size());
+            for (ObjLine obj:objList){
+                Integer s_id = obj.getLineId();
+                if(s_id == null){
+                    logger.debug("s_id为null!");
+                }
+                objMap.put(s_id,obj);
+            }
+            viewData.setFlowCountMap(flowMap);
+            viewData.setObjMap(objMap);
+            viewData.setDateList(dateList);
+
+            builder.setResultEntity(viewData,ResponseCode.RETRIEVE_SUCCEED);
+            return builder.getResponseEntity();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            builder.setErrorCode(ResponseCode.RETRIEVE_FAILED);
+        }
+        return builder.getResponseEntity();
+    }
+
 
     @RequestMapping(value = "lineSumByConditions",method = RequestMethod.GET)
     ResponseEntity<RestBody<LineCumulativeFlow>> findByConditions(@RequestParam("ids") List<Integer> ids, @RequestParam(value = "direct",required = false) Integer direct, Integer section, Date time){

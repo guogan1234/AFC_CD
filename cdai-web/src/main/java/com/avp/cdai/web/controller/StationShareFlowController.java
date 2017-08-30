@@ -1,7 +1,10 @@
 package com.avp.cdai.web.controller;
 
+import com.avp.cdai.web.entity.ObjStation;
 import com.avp.cdai.web.entity.StationShareFlow;
 import com.avp.cdai.web.entity.StationShareFlow_;
+import com.avp.cdai.web.entity.ViewData;
+import com.avp.cdai.web.repository.ObjStationRepository;
 import com.avp.cdai.web.repository.StationShareFlowRepository;
 import com.avp.cdai.web.rest.ResponseBuilder;
 import com.avp.cdai.web.rest.ResponseCode;
@@ -21,18 +24,19 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 /**
- * Created by pw on 2017/8/11.
+ * Created by guo on 2017/8/11.
  */
 @RestController
 public class StationShareFlowController {
     @Autowired
     StationShareFlowRepository stationShareFlowRepository;
+    @Autowired
+    ObjStationRepository objStationRepository;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -70,6 +74,73 @@ public class StationShareFlowController {
         return builder.getResponseEntity();
     }
 
+    @RequestMapping(value = "viewDataStationShareByConditions",method = RequestMethod.GET)
+    ResponseEntity<RestBody<ViewData<ObjStation>>> viewDataFindByConditions(@RequestParam("ids") List<Integer> ids, @RequestParam(value = "direct",required = false) Integer direct, Integer section, Date time){
+        ResponseBuilder builder = ResponseBuilder.createBuilder();
+        try {
+            Date startTime = null;
+            Date endTime = null;
+            if (time != null) {
+                SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+                String strStart = format1.format(time);
+                SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd 23:59:59");
+                String strEnd = format2.format(time);
+                logger.debug("viewDataStationShareByConditions--起始时间为：{}，结束时间为：{}", strStart, strEnd);
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                try {
+                    startTime = format.parse(strStart);
+                    endTime = format.parse(strEnd);
+                } catch (Exception e) {
+                    logger.error(e.getMessage());
+                }
+            }
+            logger.debug("ids数据量为:({})", ids.size());
+            ViewData<ObjStation> viewData = new ViewData<ObjStation>();
+            Map<Integer,List<Integer>> flowMap = new HashMap<Integer,List<Integer>>();
+            Map<Integer,ObjStation> objMap = new HashMap<Integer,ObjStation>();
+            List<Date> dateList = null;
+            //取范围较大的时间轴列表
+            Integer tempCount = 0;
+            for(int i = 0;i<ids.size();i++) {
+                List<Integer> temp = new ArrayList<Integer>();
+                List<StationShareFlow> list = stationShareFlowRepository.getData(ids.get(i), section,startTime,endTime);
+                logger.debug("数据量为:({},{})", list.size(),ids.get(i));
+                Integer key = null;
+                List<Date> tempDateList = new ArrayList<Date>();
+                for (StationShareFlow s:list){
+                    temp.add(s.getFlowCount());
+                    tempDateList.add(s.getFlowTime());
+                }
+                if(list.size() > tempCount) {
+                    tempCount = list.size();
+                    dateList = tempDateList;
+                }
+                flowMap.put(ids.get(i),temp);
+            }
+            logger.debug("flowMap数据量为:({})", flowMap.size());
+//            List<ObjStation> objList = stationShareFlowRepository.getObjData();
+            List<ObjStation> objList = objStationRepository.findBystationIdIn(ids);
+            logger.debug("ObjStation数据量为:({})", objList.size());
+            for (ObjStation obj:objList){
+                Integer s_id = obj.getStationId();
+                if(s_id == null){
+                    logger.debug("s_id为null!");
+                }
+                objMap.put(s_id,obj);
+            }
+            viewData.setFlowCountMap(flowMap);
+            viewData.setObjMap(objMap);
+            viewData.setDateList(dateList);
+
+            builder.setResultEntity(viewData,ResponseCode.RETRIEVE_SUCCEED);
+            return builder.getResponseEntity();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            builder.setErrorCode(ResponseCode.RETRIEVE_FAILED);
+        }
+        return builder.getResponseEntity();
+    }
+
     // Dynamic Query Utils
     public Specification<StationShareFlow> byConditions(List<Integer> ids, Integer direct, Integer section, Date time) {
         return new Specification<StationShareFlow>() {
@@ -80,7 +151,7 @@ public class StationShareFlowController {
                 if (ids != null) {
 //                    predicate.getExpressions().add(builder.equal(root.get(LineTimeShareFlow_.id), ids));
 //                    predicate.getExpressions().add(builder.in(root.get(LineTimeShareFlow_.lineId)).in(ids));
-                    predicate.getExpressions().add(root.<Integer>get(StationShareFlow_.stationId).in(ids));
+                    predicate.getExpressions().add(root.get(StationShareFlow_.stationId).in(ids));
                 }
 //
                 logger.debug("stationShareByConditions请求的参数direct值为:{}", direct);

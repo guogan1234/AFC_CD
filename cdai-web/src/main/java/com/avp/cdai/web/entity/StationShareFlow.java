@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * Created by pw on 2017/8/11.
+ * Created by guo on 2017/8/11.
  */
 @Entity
 @Table(name = "station_time_sharing_passenger_flow",schema = "afccd")
@@ -101,5 +101,13 @@ public class StationShareFlow {
 
     public void setSection(Integer section) {
         this.section = section;
+    }
+
+    public StationShareFlow(){}
+
+    public StationShareFlow(Date flowTime,Long flowCount){
+        this.flowTime = flowTime;
+        this.flowCount = flowCount.intValue();
+//        this.flowCount = flowCount;
     }
 }

@@ -5,7 +5,7 @@ import javax.persistence.Id;
 import java.util.Date;
 
 /**
- * Created by pw on 2017/8/10.
+ * Created by guo on 2017/8/10.
  */
 //@Entity(name = "entity_base")
 public class EntityBase {

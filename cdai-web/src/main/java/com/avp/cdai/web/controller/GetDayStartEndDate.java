@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by pw on 2017/8/15.
+ * Created by guo on 2017/8/15.
  */
 public class GetDayStartEndDate {
     public static void CreateStartEndDate(Date start,Date end,Date time){

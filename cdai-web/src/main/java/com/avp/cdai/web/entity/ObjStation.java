@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * Created by pw on 2017/8/7.
+ * Created by guo on 2017/8/7.
  */
 @Entity
 @Table(name = "obj_station",schema = "afccd")
@@ -60,6 +60,16 @@ public class ObjStation {
     }
 
     public void setSyncTime(Date syncTime) {
+        this.syncTime = syncTime;
+    }
+
+    public ObjStation(){}
+
+    public ObjStation(Integer id, Integer stationId, String stationName, Integer lineId, Date syncTime) {
+        this.id = id;
+        this.stationId = stationId;
+        this.stationName = stationName;
+        this.lineId = lineId;
         this.syncTime = syncTime;
     }
 }

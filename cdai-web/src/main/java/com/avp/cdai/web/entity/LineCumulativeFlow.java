@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * Created by pw on 2017/8/10.
+ * Created by guo on 2017/8/10.
  */
 @Entity
 @Table(name = "line_cumulative_passenger_flow",schema = "afccd")
@@ -26,16 +26,6 @@ public class LineCumulativeFlow {
     private Date flowTime;
     @Column(name = "insert_time")
     private Date insertTime;
-    @Column(name = "line_name")
-    private String lineName;
-
-    public String getLineName() {
-        return lineName;
-    }
-
-    public void setLineName(String lineName) {
-        this.lineName = lineName;
-    }
 
     public Integer getId() {
         return id;
@@ -91,5 +81,12 @@ public class LineCumulativeFlow {
 
     public void setSection(Integer section) {
         this.section = section;
+    }
+
+    public LineCumulativeFlow(){}
+
+    public LineCumulativeFlow(Date flowTime,Long flowCount){
+        this.flowTime = flowTime;
+        this.passengerFlow = flowCount.intValue();
     }
 }

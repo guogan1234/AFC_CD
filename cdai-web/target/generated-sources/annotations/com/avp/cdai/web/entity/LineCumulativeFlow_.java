@@ -12,7 +12,6 @@ public abstract class LineCumulativeFlow_ {
 	public static volatile SingularAttribute<LineCumulativeFlow, Date> insertTime;
 	public static volatile SingularAttribute<LineCumulativeFlow, Integer> passengerFlow;
 	public static volatile SingularAttribute<LineCumulativeFlow, Integer> lineId;
-	public static volatile SingularAttribute<LineCumulativeFlow, String> lineName;
 	public static volatile SingularAttribute<LineCumulativeFlow, Integer> section;
 	public static volatile SingularAttribute<LineCumulativeFlow, Integer> id;
 	public static volatile SingularAttribute<LineCumulativeFlow, Date> flowTime;

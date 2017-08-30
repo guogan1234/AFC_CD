@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * Created by pw on 2017/8/4.
+ * Created by guo on 2017/8/4.
  */
 @Entity
 @Table(name = "obj_line",schema = "afccd")

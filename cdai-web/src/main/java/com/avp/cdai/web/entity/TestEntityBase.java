@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * Created by pw on 2017/8/11.
+ * Created by guo on 2017/8/11.
  */
 @Entity
 @Table(name = "line_time_sharing_passenger_flow",schema = "afccd")

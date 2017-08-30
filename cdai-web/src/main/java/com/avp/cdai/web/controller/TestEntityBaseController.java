@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * Created by pw on 2017/8/11.
+ * Created by guo on 2017/8/11.
  */
 @RestController
 public class TestEntityBaseController {

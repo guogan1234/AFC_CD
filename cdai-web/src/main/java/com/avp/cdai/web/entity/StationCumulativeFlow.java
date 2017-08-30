@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * Created by pw on 2017/8/11.
+ * Created by guo on 2017/8/11.
  */
 @Entity
 @Table(name = "station_cumulative_passenger_flow",schema = "afccd")
@@ -101,5 +101,12 @@ public class StationCumulativeFlow {
 
     public void setSection(Integer section) {
         this.section = section;
+    }
+
+    public StationCumulativeFlow(){}
+
+    public StationCumulativeFlow(Date flowTime,Long flowCount){
+        this.flowCount = flowCount.intValue();
+        this.flowTime = flowTime;
     }
 }

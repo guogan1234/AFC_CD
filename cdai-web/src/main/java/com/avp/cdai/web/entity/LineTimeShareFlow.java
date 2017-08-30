@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * Created by pw on 2017/8/8.
+ * Created by guo on 2017/8/8.
  */
 @Entity
 @Table(name = "line_time_sharing_passenger_flow",schema = "afccd")
@@ -26,8 +26,6 @@ public class LineTimeShareFlow{
     private Date insertTime;
     @Column(name = "section")
     private Integer section;
-    @Column(name = "line_name")
-    private String lineName;
 
     public Integer getSection() {
         return section;
@@ -43,14 +41,6 @@ public class LineTimeShareFlow{
 
     public void setInsertTime(Date insertTime) {
         this.insertTime = insertTime;
-    }
-
-    public String getLineName() {
-        return lineName;
-    }
-
-    public void setLineName(String lineName) {
-        this.lineName = lineName;
     }
 
     public Integer getId() {
@@ -91,5 +81,12 @@ public class LineTimeShareFlow{
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public LineTimeShareFlow(){}
+
+    public LineTimeShareFlow(Date flowTime,Long flowCount){
+        this.timestamp = flowTime;
+        this.passengerFlow = flowCount.intValue();
     }
 }
